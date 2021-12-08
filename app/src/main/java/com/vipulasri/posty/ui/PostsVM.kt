@@ -4,12 +4,13 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
-import com.vipulasri.posty.GetPostsQuery
-import com.vipulasri.posty.data.PostRepository
+import com.vipulasri.posty.data.handleResult
+import com.vipulasri.posty.domain.model.Post
+import com.vipulasri.posty.domain.usecase.GetPostsRequest
+import com.vipulasri.posty.domain.usecase.GetPostsUseCase
 import com.vipulasri.posty.ui.base.BaseVM
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 /**
@@ -18,7 +19,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PostsVM @Inject constructor(
-    private val postRepository: PostRepository
+    private val postsUseCase: GetPostsUseCase
 ) : BaseVM() {
 
     var viewState by mutableStateOf<PostsViewState>(PostsViewState.None)
@@ -28,23 +29,19 @@ class PostsVM @Inject constructor(
         getPosts()
     }
 
-    private fun getPosts() {
+    fun getPosts() {
         viewModelScope.launch {
             viewState = PostsViewState.Loading
-            val response = postRepository.getPosts()
-            Timber.d("response: ${response.data?.toString() ?: ""}")
+            val response = postsUseCase.perform(GetPostsRequest())
 
-            response.data?.page?.posts?.let {
-                viewState = PostsViewState.Success(
-                    response.data?.page?.posts?.filterNotNull() ?: emptyList()
-                )
-            }
-
-            if (response.data?.page?.posts == null || response.hasErrors()) {
-                viewState = PostsViewState.Error(
-                    response.errors?.toString()
-                )
-            }
+            response.handleResult(
+                onSuccess = { posts ->
+                    viewState = PostsViewState.Success(posts)
+                },
+                onError = { error ->
+                    viewState = PostsViewState.Error(error.message)
+                }
+            )
         }
     }
 
@@ -53,6 +50,6 @@ class PostsVM @Inject constructor(
 sealed class PostsViewState {
     object None : PostsViewState()
     object Loading : PostsViewState()
-    class Success(val posts: List<GetPostsQuery.Post>) : PostsViewState()
+    class Success(val posts: List<Post>) : PostsViewState()
     class Error(val message: String?) : PostsViewState()
 }

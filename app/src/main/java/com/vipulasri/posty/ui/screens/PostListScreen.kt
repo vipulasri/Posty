@@ -1,17 +1,19 @@
 package com.vipulasri.posty.ui.screens
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.vipulasri.posty.GetPostsQuery
+import com.vipulasri.posty.domain.model.Post
+import com.vipulasri.posty.ui.Error
+import com.vipulasri.posty.ui.Loading
 import com.vipulasri.posty.ui.PostsViewState
 
 /**
@@ -20,7 +22,7 @@ import com.vipulasri.posty.ui.PostsViewState
 
 
 @Composable
-fun PostListScreen(viewState: PostsViewState) {
+fun PostListScreen(viewState: PostsViewState, onRetry: (() -> Unit)? = null) {
     when (viewState) {
         is PostsViewState.Loading -> {
             Loading()
@@ -29,23 +31,13 @@ fun PostListScreen(viewState: PostsViewState) {
             PostList(posts = viewState.posts)
         }
         is PostsViewState.Error -> {
-
+            Error(message = viewState.message, onRetry)
         }
     }
 }
 
 @Composable
-private fun Loading() {
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = Modifier.fillMaxSize()
-    ) {
-        CircularProgressIndicator()
-    }
-}
-
-@Composable
-private fun PostList(posts: List<GetPostsQuery.Post>) {
+private fun PostList(posts: List<Post>) {
     LazyColumn(
         modifier = Modifier
             .fillMaxHeight()
@@ -58,16 +50,16 @@ private fun PostList(posts: List<GetPostsQuery.Post>) {
 }
 
 @Composable
-private fun PostElement(post: GetPostsQuery.Post) {
+private fun PostElement(post: Post) {
     Column(
         Modifier.padding(10.dp)
     ) {
         Text(
-            text = post.title.toString(),
+            text = post.title,
             style = MaterialTheme.typography.h6
         )
 
-        val body = post.body.toString().replace("\n", " ")
+        val body = post.body.replace("\n", " ")
         if (body.isEmpty()) return
 
         val bodyText = if (body.length > 120) {

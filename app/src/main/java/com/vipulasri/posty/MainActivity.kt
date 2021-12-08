@@ -38,7 +38,12 @@ class MainActivity : ComponentActivity() {
             }
         ) {
             Surface(color = MaterialTheme.colors.background) {
-                PostListScreen(viewState = viewModel.viewState)
+                PostListScreen(
+                    viewState = viewModel.viewState,
+                    onRetry = {
+                        viewModel.getPosts()
+                    }
+                )
             }
         }
     }
