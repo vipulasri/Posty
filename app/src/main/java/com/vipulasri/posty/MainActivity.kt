@@ -3,19 +3,24 @@ package com.vipulasri.posty
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
-import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
+import com.vipulasri.posty.domain.model.Post
+import com.vipulasri.posty.ui.Navigation
 import com.vipulasri.posty.ui.PostsVM
+import com.vipulasri.posty.ui.screens.PostDetailsScreen
 import com.vipulasri.posty.ui.screens.PostListScreen
 import com.vipulasri.posty.ui.theme.PostyTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-
-    private val viewModel: PostsVM by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,21 +33,28 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     private fun Content() {
-        Scaffold(
-            topBar = {
-                TopAppBar(
-                    title = {
-                        Text(text = stringResource(id = R.string.app_name))
+        val viewModelStoreOwner = checkNotNull(LocalViewModelStoreOwner.current) {
+            "No ViewModelStoreOwner was provided via LocalViewModelStoreOwner"
+        }
+
+        val navController = rememberNavController()
+        NavHost(navController, startDestination = Navigation.PostListScreen.title) {
+            composable(Navigation.PostListScreen.title) {
+                val viewModel: PostsVM = viewModel(viewModelStoreOwner)
+                PostListScreen(
+                    viewModel,
+                    navigateToDetails = { post ->
+                        navController.navigate(Navigation.PostDetailScreen.title + "/${post.id}")
                     }
                 )
             }
-        ) {
-            Surface(color = MaterialTheme.colors.background) {
-                PostListScreen(
-                    viewState = viewModel.viewState,
-                    onRetry = {
-                        viewModel.getPosts()
-                    }
+            composable(
+                route = Navigation.PostDetailScreen.title + "/{id}",
+                arguments = listOf(navArgument("id") { type = NavType.StringType })
+            ) { backStackEntry ->
+                val postId = backStackEntry.arguments?.getString("id")
+                PostDetailsScreen(
+                    post = Post("2", "Hello", "Body")
                 )
             }
         }

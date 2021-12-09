@@ -1,19 +1,21 @@
 package com.vipulasri.posty.ui.screens
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Divider
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.vipulasri.posty.R
 import com.vipulasri.posty.domain.model.Post
 import com.vipulasri.posty.ui.Error
 import com.vipulasri.posty.ui.Loading
+import com.vipulasri.posty.ui.PostsVM
 import com.vipulasri.posty.ui.PostsViewState
 
 /**
@@ -22,37 +24,61 @@ import com.vipulasri.posty.ui.PostsViewState
 
 
 @Composable
-fun PostListScreen(viewState: PostsViewState, onRetry: (() -> Unit)? = null) {
-    when (viewState) {
-        is PostsViewState.Loading -> {
-            Loading()
+fun PostListScreen(
+    viewModel: PostsVM,
+    navigateToDetails: (post: Post) -> Unit
+) {
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(text = stringResource(id = R.string.app_name))
+                }
+            )
         }
-        is PostsViewState.Success -> {
-            PostList(posts = viewState.posts)
-        }
-        is PostsViewState.Error -> {
-            Error(message = viewState.message, onRetry)
+    ) {
+        when (val viewState = viewModel.viewState) {
+            is PostsViewState.Loading -> {
+                Loading()
+            }
+            is PostsViewState.Success -> {
+                PostList(posts = viewState.posts, onPostClick = navigateToDetails)
+            }
+            is PostsViewState.Error -> {
+                Error(message = viewState.message, onRetry = {
+                    viewModel.getPosts()
+                })
+            }
         }
     }
 }
 
 @Composable
-private fun PostList(posts: List<Post>) {
+private fun PostList(
+    posts: List<Post>,
+    onPostClick: (post: Post) -> Unit
+) {
     LazyColumn(
         modifier = Modifier
             .fillMaxHeight()
     ) {
         items(posts) { post ->
-            PostElement(post)
+            PostElement(post, onPostClick)
             Divider()
         }
     }
 }
 
 @Composable
-private fun PostElement(post: Post) {
+private fun PostElement(
+    post: Post,
+    onPostClick: (post: Post) -> Unit
+) {
     Column(
         Modifier.padding(10.dp)
+            .clickable {
+                onPostClick.invoke(post)
+            }
     ) {
         Text(
             text = post.title,
