@@ -63,7 +63,7 @@ private fun PostElement(post: Post) {
         if (body.isEmpty()) return
 
         val bodyText = if (body.length > 120) {
-            "${body.substring(120)}..."
+            "${body.substring(0, 120)}..."
         } else body
 
         Text(
