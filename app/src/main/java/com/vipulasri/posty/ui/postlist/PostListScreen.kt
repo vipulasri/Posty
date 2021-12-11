@@ -1,4 +1,4 @@
-package com.vipulasri.posty.ui.screens
+package com.vipulasri.posty.ui.postlist
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -10,10 +10,11 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import com.vipulasri.posty.R
 import com.vipulasri.posty.domain.model.Post
-import com.vipulasri.posty.ui.*
+import com.vipulasri.posty.ui.DEFAULT_PADDING
+import com.vipulasri.posty.ui.Error
+import com.vipulasri.posty.ui.Loading
 
 /**
  * Created by Vipul Asri on 08/12/21.
@@ -72,7 +73,8 @@ private fun PostElement(
     onPostClick: (post: Post) -> Unit
 ) {
     Column(
-        Modifier.clickable {
+        Modifier
+            .clickable {
                 onPostClick.invoke(post)
             }
             .padding(DEFAULT_PADDING)

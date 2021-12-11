@@ -12,10 +12,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.vipulasri.posty.ui.Navigation
-import com.vipulasri.posty.ui.PostDetailsVM
-import com.vipulasri.posty.ui.PostsVM
-import com.vipulasri.posty.ui.screens.PostDetailsScreen
-import com.vipulasri.posty.ui.screens.PostListScreen
+import com.vipulasri.posty.ui.postdetails.PostDetailsScreen
+import com.vipulasri.posty.ui.postdetails.PostDetailsVM
+import com.vipulasri.posty.ui.postlist.PostListScreen
+import com.vipulasri.posty.ui.postlist.PostsVM
 import com.vipulasri.posty.ui.theme.PostyTheme
 import dagger.hilt.android.AndroidEntryPoint
 

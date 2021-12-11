@@ -1,4 +1,4 @@
-package com.vipulasri.posty.ui
+package com.vipulasri.posty.ui.postdetails
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf

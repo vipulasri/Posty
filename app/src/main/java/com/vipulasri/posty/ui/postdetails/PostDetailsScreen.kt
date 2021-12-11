@@ -1,4 +1,4 @@
-package com.vipulasri.posty.ui.screens
+package com.vipulasri.posty.ui.postdetails
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
