@@ -15,6 +15,8 @@ import com.vipulasri.posty.R
  * Created by Vipul Asri on 09/12/21.
  */
 
+val DEFAULT_PADDING = 10.dp
+
 @Composable
 fun Loading() {
     Box(
@@ -33,7 +35,7 @@ fun Error(message: String?, onRetry: (() -> Unit)? = null) {
         verticalArrangement = Arrangement.Center,
     ) {
         Text(text = message ?: stringResource(R.string.error_unknown))
-        Spacer(modifier = Modifier.height(10.dp))
+        Spacer(modifier = Modifier.height(DEFAULT_PADDING))
         Button(onClick = { onRetry?.invoke() }) {
             Text(text = stringResource(R.string.retry))
         }

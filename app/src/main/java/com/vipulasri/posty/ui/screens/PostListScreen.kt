@@ -13,10 +13,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.vipulasri.posty.R
 import com.vipulasri.posty.domain.model.Post
-import com.vipulasri.posty.ui.Error
-import com.vipulasri.posty.ui.Loading
-import com.vipulasri.posty.ui.PostsVM
-import com.vipulasri.posty.ui.PostsViewState
+import com.vipulasri.posty.ui.*
 
 /**
  * Created by Vipul Asri on 08/12/21.
@@ -75,7 +72,7 @@ private fun PostElement(
     onPostClick: (post: Post) -> Unit
 ) {
     Column(
-        Modifier.padding(10.dp)
+        Modifier.padding(DEFAULT_PADDING)
             .clickable {
                 onPostClick.invoke(post)
             }

@@ -1,6 +1,7 @@
 package com.vipulasri.posty.di
 
 import com.vipulasri.posty.data.repo.PostRepository
+import com.vipulasri.posty.domain.usecase.GetPostByIdUseCase
 import com.vipulasri.posty.domain.usecase.GetPostsUseCase
 import dagger.Module
 import dagger.Provides
@@ -22,6 +23,14 @@ object UseCaseModule {
         postRepository: PostRepository
     ): GetPostsUseCase {
         return GetPostsUseCase(postRepository)
+    }
+
+    @Singleton
+    @Provides
+    fun provideGetPostByIdUseCase(
+        postRepository: PostRepository
+    ): GetPostByIdUseCase {
+        return GetPostByIdUseCase(postRepository)
     }
 
 }

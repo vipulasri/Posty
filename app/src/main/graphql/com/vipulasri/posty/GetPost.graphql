@@ -1,0 +1,12 @@
+query GetPostById($id: ID!)  {
+  post(id: $id) {
+    id
+    title
+    body
+    user {
+      id
+      name
+      username
+    }
+  }
+}

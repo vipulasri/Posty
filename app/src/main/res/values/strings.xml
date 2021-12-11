@@ -2,4 +2,5 @@
     <string name="app_name">Posty</string>
     <string name="retry">Retry</string>
     <string name="error_unknown">Unknown error occurred</string>
+    <string name="posted_by">Posted By:</string>
 </resources>

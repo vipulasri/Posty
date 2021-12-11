@@ -11,8 +11,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.vipulasri.posty.domain.model.Post
 import com.vipulasri.posty.ui.Navigation
+import com.vipulasri.posty.ui.PostDetailsVM
 import com.vipulasri.posty.ui.PostsVM
 import com.vipulasri.posty.ui.screens.PostDetailsScreen
 import com.vipulasri.posty.ui.screens.PostListScreen
@@ -52,9 +52,14 @@ class MainActivity : ComponentActivity() {
                 route = Navigation.PostDetailScreen.title + "/{id}",
                 arguments = listOf(navArgument("id") { type = NavType.StringType })
             ) { backStackEntry ->
-                val postId = backStackEntry.arguments?.getString("id")
+                val postId = backStackEntry.arguments?.getString("id") ?: ""
+                val viewModel: PostDetailsVM = viewModel(viewModelStoreOwner)
                 PostDetailsScreen(
-                    post = Post("2", "Hello", "Body")
+                    viewModel,
+                    postId,
+                    onBack = {
+                        navController.popBackStack()
+                    }
                 )
             }
         }

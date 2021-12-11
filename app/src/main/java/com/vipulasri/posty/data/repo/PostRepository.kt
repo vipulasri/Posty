@@ -1,5 +1,6 @@
 package com.vipulasri.posty.data.repo
 
+import com.vipulasri.posty.GetPostByIdQuery
 import com.vipulasri.posty.GetPostsQuery
 import com.vipulasri.posty.data.SafeResult
 import com.vipulasri.posty.data.remote.IPostRemoteSource
@@ -14,6 +15,10 @@ class PostRepository(
 
     suspend fun getPosts(page: Int, limit: Int): SafeResult<GetPostsQuery.Data> {
         return remoteSource.getPosts(page, limit)
+    }
+
+    suspend fun getPostById(id: String): SafeResult<GetPostByIdQuery.Data> {
+        return remoteSource.getPostById(id)
     }
 
 }

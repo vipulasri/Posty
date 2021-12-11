@@ -2,6 +2,7 @@ package com.vipulasri.posty.data.remote
 
 import com.apollographql.apollo.ApolloClient
 import com.apollographql.apollo.api.Input
+import com.vipulasri.posty.GetPostByIdQuery
 import com.vipulasri.posty.GetPostsQuery
 import com.vipulasri.posty.data.SafeResult
 import com.vipulasri.posty.data.awaitSafeResult
@@ -36,8 +37,15 @@ class PostRemoteSource(
         }
     }
 
+    override suspend fun getPostById(id: String): SafeResult<GetPostByIdQuery.Data> {
+        return withContext(dispatcher) {
+            apolloClient.query(GetPostByIdQuery(id)).awaitSafeResult()
+        }
+    }
+
 }
 
 interface IPostRemoteSource {
     suspend fun getPosts(page: Int, limit: Int): SafeResult<GetPostsQuery.Data>
+    suspend fun getPostById(id: String): SafeResult<GetPostByIdQuery.Data>
 }
