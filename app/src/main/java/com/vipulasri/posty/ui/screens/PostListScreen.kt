@@ -72,10 +72,10 @@ private fun PostElement(
     onPostClick: (post: Post) -> Unit
 ) {
     Column(
-        Modifier.padding(DEFAULT_PADDING)
-            .clickable {
+        Modifier.clickable {
                 onPostClick.invoke(post)
             }
+            .padding(DEFAULT_PADDING)
     ) {
         Text(
             text = post.title,
