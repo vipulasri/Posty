@@ -5,6 +5,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -25,7 +26,9 @@ fun PostDetailsScreen(
     postId: String,
     onBack: () -> Unit
 ) {
-    viewModel.getPostDetails(postId)
+    LaunchedEffect(key1 = postId, block = {
+        viewModel.getPostDetails(postId)
+    })
     val title = remember { mutableStateOf("") }
     Scaffold(
         topBar = {
@@ -69,8 +72,9 @@ fun PostDetailsScreen(
 @Composable
 private fun PostDetails(post: Post) {
     Column(
-        modifier = Modifier.fillMaxSize()
-            .padding(DEFAULT_PADDING)
+        modifier = Modifier
+                .fillMaxSize()
+                .padding(DEFAULT_PADDING)
     ) {
         Text(
             text = post.title,
